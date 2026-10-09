@@ -1,0 +1,42 @@
+{
+  "name": "cypress-playwright-bdd-e2e",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Testes E2E com BDD (Cucumber/Gherkin): os mesmos arquivos .feature executados no Cypress e no Playwright",
+  "author": "Moisés Chiaretto",
+  "license": "ISC",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:test": "cross-env REPORT_NAME=todas cypress run --browser chrome",
+    "cy:test:sem-falha": "cross-env REPORT_NAME=01-sem-falha cypress run --browser chrome --spec features/01_WizardDadosVeiculo_SemFalha.feature",
+    "cy:test:com-falha": "cross-env REPORT_NAME=02-com-falha cypress run --browser chrome --spec features/02_WizardDadosVeiculo_ComFalha.feature",
+    "cy:test:indefinido": "cross-env REPORT_NAME=03-indefinido cypress run --browser chrome --spec features/03_WizardDadosVeiculo_Indefinido.feature",
+    "pw:test": "bddgen && cross-env REPORT_NAME=todas playwright test",
+    "pw:test:sem-falha": "bddgen && cross-env REPORT_NAME=01-sem-falha playwright test 01_WizardDadosVeiculo_SemFalha",
+    "pw:test:com-falha": "bddgen && cross-env REPORT_NAME=02-com-falha playwright test 02_WizardDadosVeiculo_ComFalha",
+    "pw:test:indefinido": "bddgen && cross-env REPORT_NAME=03-indefinido playwright test 03_WizardDadosVeiculo_Indefinido",
+    "pw:report:sem-falha": "playwright show-report reports/playwright/01-sem-falha/html",
+    "pw:report:com-falha": "playwright show-report reports/playwright/02-com-falha/html",
+    "pw:report:indefinido": "playwright show-report reports/playwright/03-indefinido/html",
+    "allure:cy:sem-falha": "allure generate allure-results/cypress/01-sem-falha --clean --single-file -o allure-report/cypress/01-sem-falha --name Cypress-01-Sem-Falha && allure open allure-report/cypress/01-sem-falha",
+    "allure:cy:com-falha": "allure generate allure-results/cypress/02-com-falha --clean --single-file -o allure-report/cypress/02-com-falha --name Cypress-02-Com-Falha && allure open allure-report/cypress/02-com-falha",
+    "allure:cy:indefinido": "allure generate allure-results/cypress/03-indefinido --clean --single-file -o allure-report/cypress/03-indefinido --name Cypress-03-Indefinido && allure open allure-report/cypress/03-indefinido",
+    "allure:pw:sem-falha": "allure generate allure-results/playwright/01-sem-falha --clean --single-file -o allure-report/playwright/01-sem-falha --name Playwright-01-Sem-Falha && allure open allure-report/playwright/01-sem-falha",
+    "allure:pw:com-falha": "allure generate allure-results/playwright/02-com-falha --clean --single-file -o allure-report/playwright/02-com-falha --name Playwright-02-Com-Falha && allure open allure-report/playwright/02-com-falha",
+    "allure:pw:indefinido": "allure generate allure-results/playwright/03-indefinido --clean --single-file -o allure-report/playwright/03-indefinido --name Playwright-03-Indefinido && allure open allure-report/playwright/03-indefinido",
+    "test:sem-falha": "npm run cy:test:sem-falha && npm run pw:test:sem-falha"
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^28.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "@playwright/test": "^1.56.1",
+    "allure-commandline": "^2.46.1",
+    "allure-cypress": "^3.11.1",
+    "allure-playwright": "^3.11.1",
+    "cross-env": "^7.0.3",
+    "cypress": "^15.21.1",
+    "cypress-on-fix": "^1.1.0",
+    "esbuild": "^0.25.10",
+    "playwright-bdd": "^9.2.1"
+  }
+}

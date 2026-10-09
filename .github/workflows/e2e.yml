@@ -1,0 +1,74 @@
+name: E2E BDD — Cypress e Playwright
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      # No CI roda só o cenário SEM FALHA: os cenários COM FALHA e INDEFINIDO
+      # falham de propósito (demonstração) e deixariam o pipeline sempre vermelho.
+      - name: Rodar BDD no Cypress (SEM FALHA)
+        run: npm run cy:test:sem-falha
+
+      - name: Gerar relatório Allure do Cypress
+        if: always()
+        run: npx allure generate allure-results/cypress/01-sem-falha -o allure-report/cypress/01-sem-falha --name "Cypress - 01 Sem Falha"
+
+      - name: Publicar relatórios do Cypress
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios-cypress
+          path: |
+            reports/cypress/
+            allure-report/cypress/
+          retention-days: 30
+
+  playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Rodar BDD no Playwright (SEM FALHA)
+        run: npm run pw:test:sem-falha
+
+      - name: Gerar relatório Allure do Playwright
+        if: always()
+        run: npx allure generate allure-results/playwright/01-sem-falha -o allure-report/playwright/01-sem-falha --name "Playwright - 01 Sem Falha"
+
+      - name: Publicar relatórios do Playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios-playwright
+          path: |
+            reports/playwright/
+            allure-report/playwright/
+          retention-days: 30

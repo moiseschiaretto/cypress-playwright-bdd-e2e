@@ -1,0 +1,9 @@
+node_modules/
+reports/
+.features-gen/
+test-results/
+cypress/screenshots/
+cypress/videos/
+allure-results/
+allure-report/
+cucumber-report.html
